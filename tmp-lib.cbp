@@ -4,13 +4,13 @@
 	<Project>
 		<Option title="tmp-lib" />
 		<Option pch_mode="2" />
-		<Option compiler="gcc" />
+		<Option compiler="clang" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/tmp-lib" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
-				<Option compiler="gcc" />
+				<Option compiler="clang" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -19,7 +19,7 @@
 				<Option output="bin/Release/tmp-lib" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
-				<Option compiler="gcc" />
+				<Option compiler="clang" />
 				<Compiler>
 					<Add option="-O2" />
 				</Compiler>
@@ -34,6 +34,7 @@
 		</Compiler>
 		<Unit filename="src/bind_this.hpp" />
 		<Unit filename="src/sample.cpp" />
+		<Unit filename="src/to_fptr.hpp" />
 		<Unit filename="src/utilities.hpp" />
 		<Unit filename="src/variadic_insert.hpp" />
 		<Extensions>

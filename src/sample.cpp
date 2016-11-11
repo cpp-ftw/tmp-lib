@@ -1,7 +1,9 @@
 #include <iostream>
+#include <csignal>
 
 #include "variadic_insert.hpp"
 #include "bind_this.hpp"
+#include "to_fptr.hpp"
 
 double foo(double d1, double d2, double d3, double d4)
 {
@@ -30,10 +32,23 @@ void sample_bind_this()
     std::cout << f(4, 3, 2) << std::endl;
 }
 
+void sample_to_fptr()
+{
+    std::function<void(int)> sh = [](int sig)
+    {
+        std::cout << "Signal " << sig << " caught." << std::endl;
+    };
+
+    signal(SIGINT, tmp_lib::to_fptr(sh, []{}));
+
+    std::cin.ignore();
+}
+
 int main()
 {
     sample_variadic_insert();
     sample_bind_this();
+    sample_to_fptr();
 }
 
 

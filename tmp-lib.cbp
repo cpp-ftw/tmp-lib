@@ -30,9 +30,11 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="src/bind_this.hpp" />
+		<Unit filename="src/constexpr_str.hpp" />
 		<Unit filename="src/sample.cpp" />
 		<Unit filename="src/to_fptr.hpp" />
 		<Unit filename="src/utilities.hpp" />

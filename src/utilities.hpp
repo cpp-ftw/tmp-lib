@@ -19,6 +19,19 @@ static constexpr auto make_seq()
 
 
 
+template<typename T>
+struct my_remove_const
+{
+    using type = T;
+};
+
+template<typename T>
+struct my_remove_const<const T>
+{
+    using type = T;
+};
+
+
 namespace internal
 {
     template<typename T, std::size_t N, int... I>
@@ -153,10 +166,11 @@ namespace internal
     }
 }
 
-template<typename Q, typename T, std::size_t N, typename COMP>
+template<typename T, std::size_t N, typename COMP>
 constexpr std::array<T, N> selection_sort(const std::array<T, N> arr, COMP comp)
 {
-    return internal::selection_sort_helper<Q>(arr, comp, make_seq<N-1>(), arr[bound_search(arr, comp)]);
+    return internal::selection_sort_helper<typename my_remove_const<T>::type>
+        (arr, comp, make_seq<N-1>(), arr[bound_search(arr, comp)]);
 }
 
 }

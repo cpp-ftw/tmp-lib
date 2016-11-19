@@ -104,7 +104,7 @@ class smart_enum : public TRAITS
 
     static constexpr std::array<const char*, l_size> l_arr = internal::lookup_generate<l_size>(m_arr, m_min, m_max, not_found);
 
-    static constexpr std::array<element_t, m_size> t_arr = selection_sort<std::pair<enum_t, const char*>>(m_arr, internal::str_pair_cmp<enum_t>);
+    static constexpr std::array<element_t, m_size> t_arr = selection_sort(m_arr, internal::str_pair_cmp<enum_t>);
 
 private:
 

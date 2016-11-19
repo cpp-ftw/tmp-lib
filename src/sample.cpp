@@ -69,6 +69,11 @@ struct sample_enum_traits
 
 using sample_enum = tmp_lib::smart_enum<sample_enum_traits>;
 
+constexpr bool intcmp(int a, int b)
+{
+    return a < b;
+}
+
 void sample_smart_enum()
 {
     constexpr sample_enum a = sample_enum::A;
@@ -77,6 +82,18 @@ void sample_smart_enum()
 
     std::cout << astr << std::endl;
     std::cout << sample_enum(sample_enum::B).to_string() << std::endl;
+
+    constexpr int arr[] = {3, 4, -1, 0};
+    constexpr auto arr2 = tmp_lib::to_array(arr);
+
+    constexpr auto arr3 = tmp_lib::selection_sort<int>(arr2, intcmp);
+
+    sample_enum b = sample_enum::from_str("B");
+    std::cout << b.value() << std::endl;
+
+    for(auto i : arr3)
+        std::cout << i << ' ';
+    std::cout << std::endl;
 }
 
 int main()

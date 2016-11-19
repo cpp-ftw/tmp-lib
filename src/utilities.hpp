@@ -92,7 +92,6 @@ namespace internal
         return def;
     }
 #endif // __cplusplus < 201402L
-
 }
 
 
@@ -102,6 +101,53 @@ constexpr T linear_search(std::array<T, N> arr, COMP comp, S s, S def)
     return internal::linear_search_helper(arr, comp, s, def, 0);
 }
 
+
+namespace internal
+{
+
+    template<typename T, typename COMP>
+    struct selection_sort_cmp
+    {
+        T min_elem;
+        COMP comp;
+
+        constexpr bool operator()(T new_val, T old_val) const
+        {
+            return !comp(min_elem, old_val) || (comp(min_elem, new_val) && comp(new_val, old_val));
+        }
+    };
+
+    template<typename Q, typename T, std::size_t N, typename COMP>
+    constexpr std::pair<T, std::size_t> selection_sort_helper_helper_helper(const std::array<T, N> arr, COMP comp)
+    {
+        return { arr[bound_search(arr, comp)], bound_search(arr, comp) };
+    }
+
+    template<typename Q, typename T, std::size_t N, typename COMP, int... SEQ>
+    constexpr std::array<std::pair<T, std::size_t>, N> selection_sort_helper_helper(const std::array<T, N> arr, COMP comp, seq<SEQ...>, Q arr_min)
+    {
+        const std::array<std::pair<T, std::size_t>, N> retval =
+        {{
+            selection_sort_helper_helper_helper<Q>(arr, selection_sort_cmp<T, COMP>{arr_min, comp}),
+            selection_sort_helper_helper_helper<Q>(arr, selection_sort_cmp<T, COMP>{arr[retval[SEQ].second], comp})...
+        }};
+
+        return retval;
+    }
+
+    template<typename Q, typename T, std::size_t N, typename COMP, int... SEQ>
+    constexpr std::array<T, N> selection_sort_helper(const std::array<T, N> arr, COMP comp, seq<SEQ...>, Q arr_min)
+    {
+        const auto retval = selection_sort_helper_helper<Q>(arr, comp, make_seq<N-1>(), arr[bound_search(arr, comp)]);
+        return { { arr[bound_search(arr, comp)], (retval[SEQ].first)... } };
+    }
+}
+
+template<typename Q, typename T, std::size_t N, typename COMP>
+constexpr std::array<T, N> selection_sort(const std::array<T, N> arr, COMP comp)
+{
+    return internal::selection_sort_helper<Q>(arr, comp, make_seq<N-1>(), arr[bound_search(arr, comp)]);
+}
 
 }
 

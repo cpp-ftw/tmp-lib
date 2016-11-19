@@ -14,7 +14,6 @@ namespace internal
         return a.first == b.first;
     }
 
-
     template<std::size_t N, typename T2, std::size_t N2, typename ENUM, typename S, int... SEQ>
     constexpr std::array<const char*, N> lookup_generate_helper(const std::array<T2, N2> arr, ENUM m_min, ENUM m_max, S def, seq<SEQ...>)
     {
@@ -27,12 +26,25 @@ namespace internal
         return lookup_generate_helper<N>(arr, m_min, m_max, std::make_pair(ENUM(0), not_found), make_seq<N>());
     }
 
+    constexpr unsigned char str_cmp_sign(char c)
+    {
+        return c < 0 ? -c : c;
+    }
+#if __cplusplus < 201402L
+    constexpr int str_cmp(const char * s1, const char * s2)
+    {
+        return *s1 && (*s1 == *s2) ?
+            str_cmp(s1 + 1, s2 + 1) :
+            str_cmp_sign(*s1) - str_cmp_sign(*s2);
+    }
+#else
     constexpr int str_cmp(const char * s1, const char * s2)
     {
         while(*s1 && (*s1 == *s2))
             s1++, s2++;
-        return *s1 - *s2;
+        return str_cmp_sign(*s1) - str_cmp_sign(*s2);
     }
+#endif // __cplusplus < 201402L
 
     template<typename ENUM>
     constexpr bool str_pair_cmp(std::pair<ENUM, const char*> a, std::pair<ENUM, const char*> b)
@@ -41,7 +53,7 @@ namespace internal
     }
 
     template<typename ENUM, std::size_t N>
-    constexpr std::pair<ENUM, const char*> str_binary_search(const std::array<const std::pair<ENUM, const char*>, N> arr, const char * key)
+    std::pair<ENUM, const char*> str_binary_search(const std::array<const std::pair<ENUM, const char*>, N> arr, const char * key)
     {
         std::size_t start = 0;
         std::size_t end = N;
@@ -62,6 +74,8 @@ namespace internal
         return std::make_pair(ENUM(0), (const char*)nullptr);
     }
 }
+
+
 
 template<typename TRAITS>
 class smart_enum : public TRAITS

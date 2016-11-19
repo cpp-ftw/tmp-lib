@@ -62,12 +62,12 @@ namespace internal
 
 }
 
-
 template<typename T, std::size_t N, typename COMP>
 constexpr std::size_t bound_search(std::array<T, N> arr, COMP comp)
 {
     return internal::bound_search_helper(arr, comp, 0);
 }
+
 
 
 namespace internal
@@ -94,12 +94,12 @@ namespace internal
 #endif // __cplusplus < 201402L
 }
 
-
 template<typename T, std::size_t N, typename COMP, typename S>
 constexpr T linear_search(std::array<T, N> arr, COMP comp, S s, S def)
 {
     return internal::linear_search_helper(arr, comp, s, def, 0);
 }
+
 
 
 namespace internal
@@ -124,22 +124,32 @@ namespace internal
     }
 
     template<typename Q, typename T, std::size_t N, typename COMP, int... SEQ>
-    constexpr std::array<std::pair<T, std::size_t>, N> selection_sort_helper_helper(const std::array<T, N> arr, COMP comp, seq<SEQ...>, Q arr_min)
+    struct selection_sort_helper_helper_class
     {
-        const std::array<std::pair<T, std::size_t>, N> retval =
-        {{
-            selection_sort_helper_helper_helper<Q>(arr, selection_sort_cmp<T, COMP>{arr_min, comp}),
-            selection_sort_helper_helper_helper<Q>(arr, selection_sort_cmp<T, COMP>{arr[retval[SEQ].second], comp})...
-        }};
+        const std::array<std::pair<T, std::size_t>, N> value;
 
-        return retval;
+        constexpr selection_sort_helper_helper_class(const std::array<T, N> arr, COMP comp, Q arr_min)
+            : value {{
+                selection_sort_helper_helper_helper<Q>(arr, selection_sort_cmp<T, COMP>{arr_min, comp}),
+                selection_sort_helper_helper_helper<Q>(arr, selection_sort_cmp<T, COMP>{arr[value[SEQ].second], comp})...
+            }}
+        { }
+    };
+
+    template<typename Q, typename T, std::size_t N, typename COMP, int... SEQ>
+    constexpr const std::array<std::pair<T, std::size_t>, N> selection_sort_helper_helper(const std::array<T, N> arr, COMP comp, seq<SEQ...>, Q arr_min)
+    {
+        return selection_sort_helper_helper_class<Q, T, N, COMP, SEQ...>{arr, comp, arr_min}.value;
     }
 
     template<typename Q, typename T, std::size_t N, typename COMP, int... SEQ>
     constexpr std::array<T, N> selection_sort_helper(const std::array<T, N> arr, COMP comp, seq<SEQ...>, Q arr_min)
     {
-        const auto retval = selection_sort_helper_helper<Q>(arr, comp, make_seq<N-1>(), arr[bound_search(arr, comp)]);
-        return { { arr[bound_search(arr, comp)], (retval[SEQ].first)... } };
+        return {{
+            arr[bound_search(arr, comp)],
+            (selection_sort_helper_helper<Q>(arr, comp, make_seq<N-1>(), arr[bound_search(arr, comp)])
+                [SEQ].first)...
+        }};
     }
 }
 

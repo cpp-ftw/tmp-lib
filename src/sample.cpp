@@ -5,6 +5,7 @@
 #include "bind_this.hpp"
 #include "to_fptr.hpp"
 #include "constexpr_str.hpp"
+#include "smart_enum.hpp"
 
 double foo(double d1, double d2, double d3, double d4)
 {
@@ -51,8 +52,36 @@ void sample_constexpr_str()
     std::cout << cstr.value << std::endl;
 }
 
+struct sample_enum_traits
+{
+    enum enum_t
+    {
+        A, B, C
+    };
+
+    static constexpr std::pair<enum_t, const char*> mapping[] =
+    {
+        { A, "A" },
+        { B, "B" },
+        { C, "C" },
+    };
+};
+
+using sample_enum = tmp_lib::smart_enum<sample_enum_traits>;
+
+void sample_smart_enum()
+{
+    constexpr sample_enum a = sample_enum::A;
+
+    constexpr const char * astr = a.to_string();
+
+    std::cout << astr << std::endl;
+    std::cout << sample_enum(sample_enum::B).to_string() << std::endl;
+}
+
 int main()
 {
+    sample_smart_enum();
     sample_constexpr_str();
     sample_variadic_insert();
     sample_bind_this();

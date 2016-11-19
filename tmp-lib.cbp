@@ -36,6 +36,7 @@
 		<Unit filename="src/bind_this.hpp" />
 		<Unit filename="src/constexpr_str.hpp" />
 		<Unit filename="src/sample.cpp" />
+		<Unit filename="src/smart_enum.hpp" />
 		<Unit filename="src/to_fptr.hpp" />
 		<Unit filename="src/utilities.hpp" />
 		<Unit filename="src/variadic_insert.hpp" />

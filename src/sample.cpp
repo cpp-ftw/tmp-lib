@@ -88,7 +88,7 @@ void sample_smart_enum()
 
     constexpr auto arr3 = tmp_lib::selection_sort(arr2, intcmp);
 
-    sample_enum b = sample_enum::from_str("B");
+    constexpr sample_enum b = sample_enum::from_str("B");
     std::cout << b.value() << std::endl;
 
     for(auto i : arr3)

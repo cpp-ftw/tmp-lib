@@ -13,6 +13,7 @@
 				<Option compiler="clang" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-O0" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -33,6 +34,7 @@
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="src/algorithm.hpp" />
 		<Unit filename="src/bind_this.hpp" />
 		<Unit filename="src/constexpr_str.hpp" />
 		<Unit filename="src/sample.cpp" />

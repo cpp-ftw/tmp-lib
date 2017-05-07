@@ -6,6 +6,7 @@
 #include "to_fptr.hpp"
 #include "constexpr_str.hpp"
 #include "smart_enum.hpp"
+#include "call_kill.hpp"
 
 double foo(double d1, double d2, double d3, double d4)
 {

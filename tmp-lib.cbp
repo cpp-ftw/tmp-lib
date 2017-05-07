@@ -36,6 +36,7 @@
 		</Compiler>
 		<Unit filename="src/algorithm.hpp" />
 		<Unit filename="src/bind_this.hpp" />
+		<Unit filename="src/call_kill.hpp" />
 		<Unit filename="src/constexpr_str.hpp" />
 		<Unit filename="src/sample.cpp" />
 		<Unit filename="src/smart_enum.hpp" />

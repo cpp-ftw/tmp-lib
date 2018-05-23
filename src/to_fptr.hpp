@@ -14,7 +14,7 @@ class to_fptr_t
 
     static RET fptr_handler(ARGS... args)
     {
-        tl_function(std::forward<ARGS>(args)...);
+        return tl_function(std::forward<ARGS>(args)...);
     }
 
     static void set_func(std::function<RET(ARGS...)>&& func)
